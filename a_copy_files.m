@@ -1,63 +1,69 @@
-f1 = 'D:\Steve\OneDrive - University of Cape Town\Documents\MATLAB\DTIanalysis\steve_cubic\';
-t1 = 'D:\Steve\OneDrive - University of Cape Town\Documents\PhD\Papers\DTI2_resources\data\';
-ff1 = 'RejectImages';
-ff2 = 'Systole_Base';
-ff3 = 'Systole_Mid';
-ff4 = 'Systole_Apex';
+main = 'D:\Steve\OneDrive - University of Cape Town\Documents';
+load1 = fullfile(main,'MATLAB','DTIanalysis');
+save1 = fullfile(main,'PhD','Papers');
+l_rej = 'RejectImages';
+l_bas = 'Systole_Base';
+l_mid = 'Systole_Mid';
+l_ape = 'Systole_Apex';
+
+load2 = uigetdir(load1,'Choose folder to load from...');
+temp = split(load2,filesep);
+save2 = uigetdir(save1,'Choose folder to save to...');
+save2 = fullfile(save2,'data');
+
+list = dir(load2);
+list = list(3:end);
 
 copyImages = 0; %1;
 %%
-for j = 1:11
-    switch j
-        case 1
-            f3 = 'STEVE_DTI_002\';
-        case 2
-            f3 = 'STEVE_DTI_004\';
-        case 3
-            f3 = 'STEVE_DTI_006\';
-        case 4
-            f3 = 'STEVE_DTI_008\';
-        case 5
-            f3 = 'STEVE_DTI_009\';
-        case 6
-            f3 = 'STEVE_DTI_010\';
-        case 7
-            f3 = 'STEVE_DTI_011\';
-        case 8
-            f3 = 'STEVE_DTI_012\';
-        case 9
-            f3 = 'STEVE_DTI_013\';
-        case 10
-            f3 = 'STEVE_DTI_01STEVE_DTI_014\';
-        case 11
-            f3 = 'STEVE_DTI_016\';
-    end
-    t2 = f3;
-    for i = 1:2
-        switch i
-            case 1
-                f4 = 'affreg_HRcorr_dti_BH';
-            case 2
-                f4 = 'affreg_HRcorr_dti_CS';
+for j = 1:length(list)    
+    l_subj = list(j).name;
+    s_subj = l_subj;
+    
+    list2 = dir(fullfile(load2,l_subj));
+    list2 = list2(3:end);
+    for i = 1:length(list2)
+        l_meth = list2(i).name;
+        s_meth = l_meth;
+        
+        l_file = fullfile(load2,l_subj,l_meth,[l_meth '.xlsx']);
+        s_fold = fullfile(save2,s_subj,s_meth);
+        
+        status = mkdir(s_fold);
+        try
+            copyfile(l_file,s_fold);
+        catch
         end
-        t3 = f4;
-        from1 = [f1 f3 f4 '\' f4 '.xlsx'];
-        to1 = [t1 t2 t3 '\'];
-        mkdir(to1);
-        copyfile(from1,to1);
         if copyImages
-            from1 = [f1 f3 f4 '\' ff1];
-            from2 = [f1 f3 f4 '\' ff2];
-            from3 = [f1 f3 f4 '\' ff3];
-            from4 = [f1 f3 f4 '\' ff4];
-            to2 = [to1 '\' ff1];
-            to3 = [to1 '\' ff2];
-            to4 = [to1 '\' ff3];
-            to5 = [to1 '\' ff4];
-            copyfile(from1,to2);
-            copyfile(from2,to3);
-            copyfile(from3,to4);
-            copyfile(from4,to5);
+            l_temp = fullfile(load2,l_subj,l_meth);
+            
+            load3 = fullfile(l_temp,l_rej);
+            save3 = fullfile(s_fold,l_rej);
+            try
+                copyfile(load3,save3);
+            catch
+            end
+            
+            load3 = fullfile(l_temp,l_bas);
+            save3 = fullfile(s_fold,l_bas);
+            try
+                copyfile(load3,save3);
+            catch
+            end
+            
+            load3 = fullfile(l_temp,l_mid);
+            save3 = fullfile(s_fold,l_mid);
+            try
+                copyfile(load3,save3);
+            catch
+            end
+            
+            load3 = fullfile(l_temp,l_ape);
+            save3 = fullfile(s_fold,l_ape);
+            try
+                copyfile(load3,save3);
+            catch
+            end
         end
     end
 end
