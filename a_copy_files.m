@@ -19,6 +19,16 @@ copyImages = 0; %1;
 for j = 1:length(list)    
     l_subj = list(j).name;
     s_subj = l_subj;
+        
+    if strcmp(temp{end},'steve_oxford_2021')
+        if strcmp(l_subj,'O3TPR_C00-00_21261')
+            s_subj = 'O3TPR_CD01_20877';
+        elseif strcmp(l_subj,'O3TPR_CD01_1234')
+            s_subj = 'O3TPR_CD01_20632';
+        elseif strcmp(l_subj,'O3TPR_CD01_7777')
+            s_subj = 'O3TPR_CD01_20769';
+        end
+    end
     
     list2 = dir(fullfile(load2,l_subj));
     list2 = list2(3:end);
