@@ -36,6 +36,12 @@ for j = 1:length(list)
         l_meth = list2(i).name;
         s_meth = l_meth;
         
+        if strcmp(temp{end},'steve_oxford_2021')
+            if strcmp(l_subj,'O3TPR_C00-00_21261')
+                s_meth = s_meth(1:end-1); %remove trailing 2 from some method names
+            end
+        end
+        
         l_file = fullfile(load2,l_subj,l_meth,[l_meth '.xlsx']);
         s_fold = fullfile(save2,s_subj,s_meth);
         
