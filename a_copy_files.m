@@ -1,6 +1,6 @@
-main = 'D:\Steve\OneDrive - University of Cape Town\Documents';
-load1 = fullfile(main,'MATLAB','DTIanalysis');
-save1 = fullfile(main,'PhD','Papers');
+main = 'D:\Steve\OneDrive - University of Cape Town\Documents'; %main directory - may vary
+load1 = fullfile(main,'MATLAB','DTIanalysis'); %base directory to load from
+save1 = fullfile(main,'PhD','Papers'); %base directory to save to
 l_rej = 'RejectImages';
 l_bas = 'Systole_Base';
 l_mid = 'Systole_Mid';
@@ -12,14 +12,17 @@ save2 = uigetdir(save1,'Choose folder to save to...');
 save2 = fullfile(save2,'data');
 
 list = dir(load2);
-list = list(3:end);
+list = list(3:end); %remove . .. directories
 
 copyImages = 0; %1;
-%%
-for j = 1:length(list)    
+
+%% main loop
+for j = 1:length(list)
+    %% get subject and list methods
     l_subj = list(j).name;
     s_subj = l_subj;
-        
+    
+    %some mislabeled subjects to look out for
     if strcmp(temp{end},'steve_oxford_2021')
         if strcmp(l_subj,'O3TPR_C00-00_21261')
             s_subj = 'O3TPR_CD01_20877';
@@ -32,10 +35,13 @@ for j = 1:length(list)
     
     list2 = dir(fullfile(load2,l_subj));
     list2 = list2(3:end);
+    
+    %% copy spreadsheet of results (and images) out of each methods folder
     for i = 1:length(list2)
         l_meth = list2(i).name;
         s_meth = l_meth;
         
+        %mislabeled methods
         if strcmp(temp{end},'steve_oxford_2021')
             if strcmp(l_subj,'O3TPR_C00-00_21261')
                 s_meth = s_meth(1:end-1); %remove trailing 2 from some method names
@@ -50,6 +56,8 @@ for j = 1:length(list)
             copyfile(l_file,s_fold);
         catch
         end
+        
+        %% not every experiment has base mid and apex images
         if copyImages
             l_temp = fullfile(load2,l_subj,l_meth);
             
