@@ -2,12 +2,23 @@ clear
 close all
 
 %% load data
-valueset = (1:4); catnames = {'BH','Gated','1-Nav','Multi-Nav'};
-dataxlsx = 'dti_20220825.xlsx';
+main = uigetdir('D:\Steve\OneDrive - University of Cape Town\Documents\PhD\Papers'); %base of main directory
+listing = dir(fullfile(main,'**','dti_*.xlsx')); %find dti spreadsheet in the main directory including subfolders
+xlfile = fullfile(listing(1).folder,listing(1).name);
 
-bAll = readtable(dataxlsx,'Sheet','Sheet4');
+ds = spreadsheetDatastore(xlfile);
+ds.Sheets = 2;
+bAll = read(ds);
+
+if max(bAll.tech)==2
+    valueset = (1:2); catnames = {'BH','CS'};
+elseif max(bAll.tech)==4 
+    valueset = (1:4); catnames = {'BH','Gated','1-Nav','Multi-Nav'};
+end
+
 bAll.ID = categorical(bAll.ID);
 bAll.tech = categorical(bAll.tech,valueset,catnames);
+bAll.Slice = categorical(bAll.Slice);
 bAll.lowB = categorical(bAll.lowB);
 bAll.highB = categorical(bAll.highB);
 bAll.MD = bAll.MD * 1e3;
@@ -35,92 +46,62 @@ bAll.highB1(ind) = repmat(550,size(ind));
 ind = find(bAll.highB == "b650");
 bAll.highB1(ind) = repmat(650,size(ind));
 
-%% only neeeded if the tech names haven't been corrected already
-%{ 
-% a = find(b15.tech == "Nav-ST");
-% n = strcat({char(hex2dec('200A'))},{'1-Nav'});
-% new = repmat(n,size(a));
-% b15.tech(a) = new;
-% a = find(b15.tech == "CS-ST");
-% new = repmat({'Multi-Nav'},size(a));
-% b15.tech(a) = new;
-% b15.tech = removecats(b15.tech);
-% 
-% a = find(b50.tech == "Nav-ST");
-% n = strcat({char(hex2dec('200A'))},{'1-Nav'});
-% new = repmat(n,size(a));
-% b50.tech(a) = new;
-% a = find(b50.tech == "CS-ST");
-% new = repmat({'Multi-Nav'},size(a));
-% b50.tech(a) = new;
-% b50.tech = removecats(b50.tech);
-% 
-% a = find(b350.tech == "Nav-ST");
-% n = strcat({char(hex2dec('200A'))},{'1-Nav'});
-% new = repmat(n,size(a));
-% b350.tech(a) = new;
-% a = find(b350.tech == "CS-ST");
-% new = repmat({'Multi-Nav'},size(a));
-% b350.tech(a) = new;
-% b350.tech = removecats(b350.tech);
-%}
 %%
-fprintf('********* all ref b-value 15,50,350 s/mm^2 *******\n');
-tbl2 = bAll(:,[1:5 24:25]);
+tbl_inf = bAll(:,[1:6 25:26]);
 outl_sd = 4;
 mdl = 2;
 display_on = 0;
 
 %% MD
-%{
+% %{
 type = 'MD';
-tbl = [tbl2 bAll(:,type) bAll(:,[type 'std'])];
-[av,med,quant,skew,kurt] = descriptive_statistics(tbl,type,outl_sd,display_on);
-[lme,coeff,latLME] = lmem(tbl,type,outl_sd,mdl,display_on);
-[tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl,type,outl_sd,mdl);
+tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
+[av,med,quant,skew,kurt] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
+[lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
+[tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
 %}
 
 %% AD
 %{
 type = 'AD';
-tbl = [tbl2 bAll(:,type) bAll(:,[type 'std'])];
-[av,med,quant,skew,kurt] = descriptive_statistics(tbl,type,outl_sd,display_on);
-[lme,coeff,latLME] = lmem(tbl,type,outl_sd,mdl,display_on);
-[tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl,type,outl_sd,mdl);
+tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
+[av,med,quant,skew,kurt] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
+[lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
+[tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
 %}
 
 %% RD
 %{
 type = 'RD';
-tbl = [tbl2 bAll(:,type) bAll(:,[type 'std'])];
-[av,med,quant,skew,kurt] = descriptive_statistics(tbl,type,outl_sd,display_on);
-[lme,coeff,latLME] = lmem(tbl,type,outl_sd,mdl,display_on);
-[tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl,type,outl_sd,mdl);
+tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
+[av,med,quant,skew,kurt] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
+[lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
+[tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
 %}
 
 %% FA
 %{
 type = 'FA';
-tbl = [tbl2 bAll(:,type) bAll(:,[type 'std'])];
-[av,med,quant,skew,kurt] = descriptive_statistics(tbl,type,outl_sd,display_on);
-[lme,coeff,latLME] = lmem(tbl,type,outl_sd,mdl,display_on);
-[tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl,type,outl_sd,mdl);
+tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
+[av,med,quant,skew,kurt] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
+[lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
+[tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
 %}
 
 %% HAg
-% %{
+%{
 type = 'HAg';
-tbl = [tbl2 bAll(:,type) bAll(:,[type 'std'])];
-[av,med,quant,skew,kurt] = descriptive_statistics(tbl,type,outl_sd,display_on);
-[lme,coeff,latLME] = lmem(tbl,type,outl_sd,mdl,display_on);
-[tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl,type,outl_sd,mdl);
+tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
+[av,med,quant,skew,kurt] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
+[lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
+[tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
 %}
 
 %% HAd
-% %{
+%{
 type = 'HAd';
-tbl = [tbl2 bAll(:,type) bAll(:,[type 'std'])];
-[av,med,quant,skew,kurt] = descriptive_statistics(tbl,type,outl_sd,display_on);
-[lme,coeff,latLME] = lmem(tbl,type,outl_sd,mdl,display_on);
-[tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl,type,outl_sd,mdl);
+tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
+[av,med,quant,skew,kurt] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
+[lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
+[tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
 %}
