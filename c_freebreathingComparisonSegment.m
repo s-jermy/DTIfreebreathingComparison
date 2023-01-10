@@ -65,8 +65,10 @@ display_on = 0; %1
 type = 'MD';
 tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
 [av,med,quant,skew,kurt] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
+[p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
+print_to_pdf(type,display_on);
 %}
 
 %% AD - axial diffusivity
@@ -74,8 +76,10 @@ tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
 type = 'AD';
 tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
 [av,med,quant,skew,kurt] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
+[p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
+print_to_pdf(type,display_on);
 %}
 
 %% RD - radial diffusivity
@@ -83,8 +87,10 @@ tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
 type = 'RD';
 tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
 [av,med,quant,skew,kurt] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
+[p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
+print_to_pdf(type,display_on);
 %}
 
 %% FA - fractional anistropy
@@ -92,8 +98,10 @@ tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
 type = 'FA';
 tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
 [av,med,quant,skew,kurt] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
+[p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
+print_to_pdf(type,display_on);
 %}
 
 %% HAg - helix angle gradient
@@ -101,8 +109,10 @@ tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
 type = 'HAg';
 tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
 [av,med,quant,skew,kurt] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
+[p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
+print_to_pdf(type,display_on);
 %}
 
 %% HAd - helix angle depth
@@ -110,6 +120,8 @@ tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
 type = 'HAd';
 tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
 [av,med,quant,skew,kurt] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
+[p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
+print_to_pdf(type,display_on);
 %}
