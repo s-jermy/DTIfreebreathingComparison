@@ -5,6 +5,7 @@ close all
 main = uigetdir('D:\Steve\OneDrive - University of Cape Town\Documents\PhD\Papers'); %base of main directory
 listing = dir(fullfile(main,'**','dti_*.xlsx')); %find dti spreadsheet in the main directory including subfolders
 xlfile = fullfile(listing(1).folder,listing(1).name);
+img_folder = fullfile(listing(1).folder,'..','images');
 
 ds = spreadsheetDatastore(xlfile);
 ds.Sheets = 1;
@@ -68,7 +69,7 @@ tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
 [p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
-print_to_pdf(type,display_on);
+print_to_pdf(type,img_folder,display_on);
 %}
 
 %% AD - axial diffusivity
@@ -79,7 +80,7 @@ tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
 [p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
-print_to_pdf(type,display_on);
+print_to_pdf(type,img_folder,display_on);
 %}
 
 %% RD - radial diffusivity
@@ -90,7 +91,7 @@ tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
 [p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
-print_to_pdf(type,display_on);
+print_to_pdf(type,img_folder,display_on);
 %}
 
 %% FA - fractional anistropy
@@ -101,7 +102,7 @@ tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
 [p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
-print_to_pdf(type,display_on);
+print_to_pdf(type,img_folder,display_on);
 %}
 
 %% HAg - helix angle gradient
@@ -112,7 +113,7 @@ tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
 [p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
-print_to_pdf(type,display_on);
+print_to_pdf(type,img_folder,display_on);
 %}
 
 %% HAd - helix angle depth
@@ -123,5 +124,5 @@ tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
 [p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
-print_to_pdf(type,display_on);
+print_to_pdf(type,img_folder,display_on);
 %}
