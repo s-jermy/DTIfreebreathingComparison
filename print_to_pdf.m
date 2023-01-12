@@ -1,8 +1,9 @@
-function print_to_pdf(type,display_on)
+function print_to_pdf(type,img_folder,display_on)
 
 if display_on
+    cur_folder = fullfile(img_folder,type);
     warning('off');
-    mkdir(type);
+    mkdir(cur_folder);
     warning('on');
     
     fig = findall(groot,'Type','figure');
@@ -20,10 +21,10 @@ if display_on
 %             h.Children(j).XLabel.Position(2) = -25;
 %         end
         drawnow;
-%         print(h,fullfile(pwd,type,filename),'-depsc','-tiff','-loose');
-        exportgraphics(h,[fullfile(pwd,type,filename) '.tif'],'BackgroundColor','none','Resolution',300);
+%         print(h,fullfile(cur_folder,filename),'-depsc','-tiff','-loose');
+        exportgraphics(h,fullfile(cur_folder,[filename '.tif']),'BackgroundColor','none','Resolution',300);
 %         warning off export_fig:exportgraphics
-%         export_fig(fullfile(pwd,type,filename),'-eps','-transparent',h);
+%         export_fig(fullfile(cur_folder,filename),'-eps','-transparent',h);
 %         warning on
 
 %         set(h,'PaperUnits','Centimeters');
