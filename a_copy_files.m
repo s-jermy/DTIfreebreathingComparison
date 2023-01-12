@@ -51,7 +51,9 @@ for j = 1:length(list)
         l_file = fullfile(load2,l_subj,l_meth,[l_meth '.xlsx']);
         s_fold = fullfile(save2,s_subj,s_meth);
         
+        warning('off','MATLAB:MKDIR:DirectoryExists')
         status = mkdir(s_fold);
+        warning('on','MATLAB:MKDIR:DirectoryExists')
         try
             copyfile(l_file,s_fold);
         catch
