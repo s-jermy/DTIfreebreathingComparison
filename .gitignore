@@ -12,3 +12,4 @@ old/test.m
 *.png
 *.xlsx
 *.asv
+.DS_Store
