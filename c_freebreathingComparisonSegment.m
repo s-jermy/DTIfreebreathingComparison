@@ -2,8 +2,12 @@ clear
 close all
 
 %% load data
-main = uigetdir('D:\Steve\OneDrive - University of Cape Town\Documents\PhD\Papers'); %base of main directory
-listing = dir(fullfile(main,'**','dti_*.xlsx')); %find dti spreadsheet in the main directory including subfolders
+if ismac
+    main = uigetdir('/Users/steve/Library/CloudStorage/OneDrive-UniversityofCapeTown/Documents/PhD/Papers');
+else
+    main = uigetdir('D:\Steve\OneDrive - University of Cape Town\Documents\PhD\Papers'); %base of main directory
+end
+listing = dir(fullfile(main,'**','data','dti_*.xlsx')); %find dti spreadsheet in the main directory including subfolders
 xlfile = fullfile(listing(1).folder,listing(1).name);
 img_folder = fullfile(listing(1).folder,'..','images');
 
@@ -14,24 +18,18 @@ bAll = read(ds);
 if max(bAll.tech)==2
     valueset = (1:2); catnames = {'BH','CS'};
 elseif max(bAll.tech)==4 
-    valueset = (1:4); catnames = {'BH','Gated','1-Nav','Multi-Nav'};
+    valueset = (1:4); catnames = {'BH','CS','Gate','Nav'};
 end
-valueset2 = (1:6); catnames2 = {'A','AS','IS','I','IL','AL'};
-valueset3 = (1:4); catnames3 = {'A','S','I','L'};
 
 bAll.ID = categorical(bAll.ID);
 bAll.tech = categorical(bAll.tech,valueset,catnames);
 bAll.Slice = categorical(bAll.Slice);
 bAll.lowB = categorical(bAll.lowB);
 bAll.highB = categorical(bAll.highB);
-bAll.MD = bAll.MD * 1e3;
-bAll.MDstd = bAll.MDstd * 1e3;
-bAll.AD = bAll.AD * 1e3;
-bAll.ADstd = bAll.ADstd * 1e3;
-bAll.RD = bAll.RD * 1e3;
-bAll.RDstd = bAll.RDstd * 1e3;
 
-%%
+%% segments
+valueset2 = (1:6); catnames2 = {'A','AS','IS','I','IL','AL'};
+valueset3 = (1:4); catnames3 = {'A','S','I','L'};
 ind = find(bAll.Slice == "Apex");
 seg = categorical(bAll.segment,valueset2,catnames2);
 seg(ind) = categorical(bAll.segment(ind),valueset3,catnames3);

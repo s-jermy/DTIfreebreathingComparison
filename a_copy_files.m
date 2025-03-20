@@ -1,4 +1,8 @@
-main = 'D:\Steve\OneDrive - University of Cape Town\Documents'; %main directory - may vary
+if ismac
+    main = '/Users/steve/Library/CloudStorage/OneDrive-UniversityofCapeTown/Documents';
+else
+    main = 'D:\Steve\OneDrive - University of Cape Town\Documents'; %base of main directory
+end
 load1 = fullfile(main,'MATLAB','DTIanalysis'); %base directory to load from
 save1 = fullfile(main,'PhD','Papers'); %base directory to save to
 l_rej = 'RejectImages';
@@ -14,7 +18,7 @@ save2 = fullfile(save2,'data');
 list = dir(load2);
 list = list(3:end); %remove . .. directories
 
-copyImages = 0; %1;
+copyImages = 1; %0;
 
 %% main loop
 for j = 1:length(list)
@@ -31,6 +35,10 @@ for j = 1:length(list)
         elseif strcmp(l_subj,'O3TPR_CD01_7777')
             s_subj = 'O3TPR_CD01_20769';
         end
+    elseif contains(temp{end},'steve_cubic')
+        if strcmp(l_subj,'STEVE_DTI_01STEVE_DTI_014')
+            s_subj = 'STEVE_DTI_014';
+        end
     end
     
     list2 = dir(fullfile(load2,l_subj));
@@ -42,11 +50,11 @@ for j = 1:length(list)
         s_meth = l_meth;
         
         %mislabeled methods
-        if strcmp(temp{end},'steve_oxford_2021')
-            if strcmp(l_subj,'O3TPR_C00-00_21261')
-                s_meth = s_meth(1:end-1); %remove trailing 2 from some method names
-            end
-        end
+        % if strcmp(temp{end},'steve_oxford_2021')
+        %     if strcmp(l_subj,'O3TPR_C00-00_21261')
+        %         s_meth = s_meth(1:end-1); %remove trailing 2 from some method names
+        %     end
+        % end
         
         l_file = fullfile(load2,l_subj,l_meth,[l_meth '.xlsx']);
         s_fold = fullfile(save2,s_subj,s_meth);
