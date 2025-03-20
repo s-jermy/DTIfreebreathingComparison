@@ -5,7 +5,7 @@ Z = zscore(tbl2.(type));
 outliers = find(abs(Z)>outl_sd);
 
 %% shift lowB values
-tbl2.lowB15 = (tbl2.lowB1 - 15)/10; %shift so zero at lowB = 15
+%tbl2.lowB15 = (tbl2.lowB1 - 15)/10; %shift so zero at lowB = 15
 tbl2.lowB50 = (tbl2.lowB1 - 50)/10;
 tbl2.lowB350 = (tbl2.lowB1 - 350)/10;
 
@@ -19,25 +19,25 @@ coeff = {};
 for j=1:4
     switch j
         case 1
-            tbl2.tech = reordercats(tbl2.tech,[1;2;3;4]);
+            tbl2.tech = reordercats(tbl2.tech,[1;2;3;4]);%BH/CS/Gate/Nav
         case 2
-            tbl2.tech = reordercats(tbl2.tech,[2;1;3;4]);
+            tbl2.tech = reordercats(tbl2.tech,[2;1;3;4]);%CS/BH/Gate/Nav
         case 3
-            tbl2.tech = reordercats(tbl2.tech,[3;2;1;4]);
+            tbl2.tech = reordercats(tbl2.tech,[3;2;1;4]);%Gate/BH/CS/Nav
         case 4
-            tbl2.tech = reordercats(tbl2.tech,[4;2;3;1]);
+            tbl2.tech = reordercats(tbl2.tech,[4;2;3;1]);%Nav/BH/CS/Gate
     end
     for i=1:10
         switch i
-            case 1
-                l = 'lowB15';
-                h = 'highB350';
-            case 2
-                h = 'highB450';
-            case 3
-                h = 'highB550';
-            case 4
-                h = 'highB650';
+            % case 1
+            %     l = 'lowB15';
+            %     h = 'highB350';
+            % case 2
+            %     h = 'highB450';
+            % case 3
+            %     h = 'highB550';
+            % case 4
+            %     h = 'highB650';
             case 5
                 l = 'lowB50';
                 h = 'highB350';
@@ -52,6 +52,8 @@ for j=1:4
                 h = 'highB550';
             case 10
                 h = 'highB650';
+            otherwise
+                continue
         end
         if mdl==1
             model = sprintf('%s ~ 1 + tech * (%s + %s) + (1|ID) + (1|ID:segment)',type,l,h);

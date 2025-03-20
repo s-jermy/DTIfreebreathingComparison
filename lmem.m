@@ -20,28 +20,28 @@ outliers = find(abs(Z)>outl_sd);
 % disp('Outliers');disp(tbl(outliers,:));
 
 %% shift lowB values
-tbl2.lowB15 = (tbl2.lowB1 - 15)/10; %shift so zero at lowB = 15
+tbl2.lowB50 = (tbl2.lowB1 - 50)/10; %shift so zero at lowB = 50
 
 %% shift highB values
-tbl2.highB350 = (tbl2.highB1 - 350)/100; %shift so zero at highB = 350
+tbl2.highB350 = (tbl2.highB1 - 450)/100; %shift so zero at highB = 350
 
-c = 1/255*[[68 114 196];[165 165 165];[255 192 0];[237 125 49]];
+c = 1/255*[[68 114 196];[165 165 165];[255 192 0];[237 125 49]]; %BH/CS/Gate/Nav
 
 %% LMEMs
 if mdl==1
-    model = sprintf('%s ~ 1 + tech * (lowB15 + highB350) + (1|ID) + (1|ID:segment)',type);
+    model = sprintf('%s ~ 1 + tech * (lowB50 + highB350) + (1|ID) + (1|ID:segment)',type);
     try
         lme = fitlme(tbl2,model,'Exclude',outliers,'CheckHessian',true); %model we settled on after consultation with Francesca. Interaction terms between b-values and techs. Grouping terms as well as interactions in the random variables.
     catch
-        model = sprintf('%s ~ 1 + tech * (lowB15 + highB350) + (1|ID)',type);
+        model = sprintf('%s ~ 1 + tech * (lowB50 + highB350) + (1|ID)',type);
         lme = fitlme(tbl2,model,'Exclude',outliers,'CheckHessian',true);
     end
 elseif mdl==2
-    model = sprintf('%s ~ 1 + tech * (lowB15 + highB350) + (tech|ID:segment)',type);
+    model = sprintf('%s ~ 1 + tech * (lowB50 + highB350) + (tech|ID:segment)',type);
     try
         lme = fitlme(tbl2,model,'Exclude',outliers,'CheckHessian',true);
     catch
-        model = sprintf('%s ~ 1 + tech * (lowB15 + highB350) + (tech|ID)',type);
+        model = sprintf('%s ~ 1 + tech * (lowB50 + highB350) + (tech|ID)',type);
         lme = fitlme(tbl2,model,'Exclude',outliers,'CheckHessian',true);
     end
 end
@@ -95,27 +95,27 @@ if display_on
 end
 
 lowBm = coeff.Estimate(5) + [0 coeff.Estimate(7:9)'];
-ind = find(tbl2.tech=='BH'&tbl2.lowB=='b015');lowB(1)=mean(F(ind),'omitnan');
+ind = find(tbl2.tech=='BH'&tbl2.lowB=='b050');lowB(1)=mean(F(ind),'omitnan');
 % lowx = [-135;465];lowy = lowB(1)+[-15*lowBm(1);45*lowBm(1)];
-ind = find(tbl2.tech=='Gated'&tbl2.lowB=='b015');lowB(2)=mean(F(ind),'omitnan');
+ind = find(tbl2.tech=='CS'&tbl2.lowB=='b050');lowB(2)=mean(F(ind),'omitnan');
 % lowx = cat(2,lowx,[-134;465]);lowy = cat(2,lowy,lowB(2)+[-14.9*lowBm(2);45*lowBm(2)]);
-ind = find(tbl2.tech=='1-Nav'&tbl2.lowB=='b015');lowB(3)=mean(F(ind),'omitnan');
+ind = find(tbl2.tech=='Gate'&tbl2.lowB=='b050');lowB(3)=mean(F(ind),'omitnan');
 % lowx = cat(2,lowx,[-133;465]);lowy = cat(2,lowy,lowB(3)+[-14.8*lowBm(3);45*lowBm(3)]);
-ind = find(tbl2.tech=='Multi-Nav'&tbl2.lowB=='b015');lowB(4)=mean(F(ind),'omitnan');
+ind = find(tbl2.tech=='Nav'&tbl2.lowB=='b050');lowB(4)=mean(F(ind),'omitnan');
 % lowx = cat(2,lowx,[-132;465]);lowy = cat(2,lowy,lowB(4)+[-14.7*lowBm(4);45*lowBm(4)]);
 lowx = repmat([-135;465],1,4);lowy = lowB+[-15*lowBm;45*lowBm];
 
 highBm = coeff.Estimate(6) + [0 coeff.Estimate(10:12)'];
 ind = find(tbl2.tech=='BH'&tbl2.highB=='b350');highB(1)=mean(F(ind),'omitnan');
-ind = find(tbl2.tech=='Gated'&tbl2.highB=='b350');highB(2)=mean(F(ind),'omitnan');
-ind = find(tbl2.tech=='1-Nav'&tbl2.highB=='b350');highB(3)=mean(F(ind),'omitnan');
-ind = find(tbl2.tech=='Multi-Nav'&tbl2.highB=='b350');highB(4)=mean(F(ind),'omitnan');
+ind = find(tbl2.tech=='CS'&tbl2.highB=='b350');highB(2)=mean(F(ind),'omitnan');
+ind = find(tbl2.tech=='Gate'&tbl2.highB=='b350');highB(3)=mean(F(ind),'omitnan');
+ind = find(tbl2.tech=='Nav'&tbl2.highB=='b350');highB(4)=mean(F(ind),'omitnan');
 highx = repmat([200;800],1,4);highy = highB+[-1.5*highBm;4.5*highBm];
 
 if display_on
     tbl2.(type)(outliers,:) = nan;
     tech_num = ones(size(tbl2,1),1);
-    tech_num(tbl2.tech == 'Gated') = 2; tech_num(tbl2.tech == '1-Nav') = 3; tech_num(tbl2.tech == 'Multi-Nav') = 4; %this is to get around the fact that gscatter can't properly handle categorical variables
+    tech_num(tbl2.tech == 'CS') = 2; tech_num(tbl2.tech == 'Gate') = 3; tech_num(tbl2.tech == 'Nav') = 4; %this is to get around the fact that gscatter can't properly handle categorical variables
     
     m = min(tbl2.(type));M = max(tbl2.(type));
     switch type
