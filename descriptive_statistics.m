@@ -1,3 +1,5 @@
+%%% requires Statistics and Machine Learning Toolbox
+
 function [av,med,quant,skew,kurt] = descriptive_statistics(tbl,type,outl_sd,display_on)
 
 switch type

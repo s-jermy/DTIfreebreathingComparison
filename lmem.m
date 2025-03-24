@@ -1,3 +1,5 @@
+%%% requires Statistics and Machine Learning Toolbox
+
 function [lme,coeff,latLME] = lmem(tbl,type,outl_sd,mdl,display_on)
 
 switch type
@@ -51,7 +53,7 @@ coeff = dataset2table(lme.Coefficients);
 p = coeff.pValue;
 [corr_p,h] = bonf_holm(p(2:end),0.05);
 corr_p = [0;corr_p];
-h = [0;h];
+h = [1;h];
 coeff.corr_pValue = corr_p;
 coeff.h = h;
 
@@ -93,6 +95,8 @@ if display_on
     tbl.(type) = F;
     boxplots(tbl,type,outl_sd,1);
 end
+
+%% extract fit line
 
 lowBm = coeff.Estimate(5) + [0 coeff.Estimate(7:9)'];
 ind = find(tbl2.tech=='BH'&tbl2.lowB=='b050');lowB(1)=mean(F(ind),'omitnan');

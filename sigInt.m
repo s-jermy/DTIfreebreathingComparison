@@ -27,6 +27,7 @@ for j=1:4
         case 4
             tbl2.tech = reordercats(tbl2.tech,[4;2;3;1]);%Nav/BH/CS/Gate
     end
+    ind = 0;
     for i=1:10
         switch i
             % case 1
@@ -55,6 +56,7 @@ for j=1:4
             otherwise
                 continue
         end
+        ind = ind+1;
         if mdl==1
             model = sprintf('%s ~ 1 + tech * (%s + %s) + (1|ID) + (1|ID:segment)',type,l,h);
             try
@@ -72,8 +74,8 @@ for j=1:4
                 lme = fitlme(tbl2,model,'Exclude',outliers);
             end
         end
-        coeff{j,i} = dataset2table(lme.Coefficients);
-        se(j,i) = lme.Coefficients.SE(1);
+        coeff{j,ind} = dataset2table(lme.Coefficients);
+        se(j,ind) = lme.Coefficients.SE(1);
         
         if j>1
             break;

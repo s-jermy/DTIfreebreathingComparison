@@ -1,3 +1,5 @@
+%%% requires Statistics and Machine Learning Toolbox
+
 function [p,h] = variance_analysis(tbl,type,outl_sd,display_on)
 
 dispopt = 'off';
@@ -9,7 +11,7 @@ tbl2 = tbl;
 
 %finding outliers in whole table
 Z = zscore(tbl2.(type));
-outliers = find(abs(Z)>outl_sd);
+outliers = abs(Z)>outl_sd;
 
 %remove outliers 
 tbl2(outliers,:) = [];
