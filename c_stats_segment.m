@@ -7,12 +7,12 @@ if ismac
 else
     main = uigetdir('D:\Steve\OneDrive - University of Cape Town\Documents\PhD\Papers'); %base of main directory
 end
-listing = dir(fullfile(main,'**','data','dti_*.xlsx')); %find dti spreadsheet in the main directory including subfolders
+listing = dir(fullfile(main,'resources','data','data_*.xlsx')); %find dti spreadsheet in the main directory including subfolders
 xlfile = fullfile(listing(1).folder,listing(1).name);
-img_folder = fullfile(listing(1).folder,'..','images');
+img_folder = fullfile(listing(1).folder,'..','images',char(datetime("today",'Format','yyyyMMdd')),'segment');
 
 ds = spreadsheetDatastore(xlfile);
-ds.Sheets = 1;
+ds.Sheets = 'segment';
 bAll = read(ds);
 
 if max(bAll.tech)==2
@@ -28,11 +28,11 @@ bAll.lowB = categorical(bAll.lowB);
 bAll.highB = categorical(bAll.highB);
 
 %% segments
-valueset2 = (1:6); catnames2 = {'A','AS','IS','I','IL','AL'};
-valueset3 = (1:4); catnames3 = {'A','S','I','L'};
-ind = find(bAll.Slice == "Apex");
+valueset2 = (1:16); catnames2 = {'A','AS','IS','I','IL','AL','A','AS','IS','I','IL','AL','A','S','I','L'};
+% valueset3 = (13:16); catnames3 = {'A','S','I','L'};
+% ind = find(bAll.Slice == "Apex");
 seg = categorical(bAll.segment,valueset2,catnames2);
-seg(ind) = categorical(bAll.segment(ind),valueset3,catnames3);
+% seg(ind) = categorical(bAll.segment(ind),valueset3,catnames3);
 bAll.segment = seg;
 
 %% change lowB from categorical to continuous

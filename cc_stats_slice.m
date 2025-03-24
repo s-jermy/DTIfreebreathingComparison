@@ -7,11 +7,12 @@ if ismac
 else
     main = uigetdir('D:\Steve\OneDrive - University of Cape Town\Documents\PhD\Papers'); %base of main directory
 end
-listing = dir(fullfile(main,'**','data','dti_*.xlsx')); %find dti spreadsheet in the main directory including subfolders
+listing = dir(fullfile(main,'resources','data','data_*.xlsx')); %find dti spreadsheet in the main directory including subfolders
 xlfile = fullfile(listing(1).folder,listing(1).name);
+img_folder = fullfile(listing(1).folder,'..','images',char(datetime("today",'Format','yyyyMMdd')),'slice');
 
 ds = spreadsheetDatastore(xlfile);
-ds.Sheets = 2;
+ds.Sheets = 'slice';
 bAll = read(ds);
 
 if max(bAll.tech)==2
@@ -45,10 +46,10 @@ ind = find(bAll.highB == "b650");
 bAll.highB1(ind) = repmat(650,size(ind));
 
 %%
-tbl_inf = bAll(:,[1:6 25:26]);
+tbl_inf = bAll(:,[1:5 24:25]);
 outl_sd = 4;
 mdl = 2;
-display_on = 0;
+display_on = 1;
 
 %% MD
 % %{
@@ -58,6 +59,7 @@ tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
 [p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
+print_to_pdf(type,img_folder,display_on);
 %}
 
 %% AD
@@ -88,6 +90,7 @@ tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
 [p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
+print_to_pdf(type,img_folder,display_on);
 %}
 
 %% HAg
@@ -98,6 +101,7 @@ tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
 [p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
+print_to_pdf(type,img_folder,display_on);
 %}
 
 %% HAd

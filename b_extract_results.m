@@ -59,7 +59,7 @@ for i = 1:len
             elseif strcmp(tok2{3},'Apex')
                 segment = segment+12;
             end
-            tbl_info = table(ID,tech,slice,lowB,highB,segment','VariableNames',{'id','tech','Slice','lowB','highB','segment'});
+            tbl_info = table(ID,tech,slice,lowB,highB,segment','VariableNames',{'ID','tech','Slice','lowB','highB','segment'});
             tbl_segment = [tbl_segment;tbl_info tbl_result];
             tbl_segment(end,:) = []; %remove average row
         else
