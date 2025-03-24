@@ -9,6 +9,7 @@ if display_on
     fig = findall(groot,'Type','figure');
     for num = 1:numel(fig)
         h = fig(num); %or choose the figure you want to print
+        h.Units = 'pixels';
         filename = ['fig' num2str(h.Number) '_' h.Name]; %set filename
         
         ratio = str2double(h.Tag);
