@@ -26,15 +26,15 @@ lat(7,1) = {'\multirow[t]{3}{*}{Technique:b\textsubscript{low}\superbold{a}}'};
 lat(10,1) = {'\multirow[t]{3}{*}{Technique:b\textsubscript{high}\superbold{b}}'};
 
 %% name of factor
-lat(2,3) = {'Gated'};
-lat(3,3) = {'1-Nav'};
-lat(4,3) = {'Multi-Nav'};
-lat(7,3) = {'Gated:b\textsubscript{low}'};
-lat(8,3) = {'1-Nav:b\textsubscript{low}'};
-lat(9,3) = {'Multi-Nav:b\textsubscript{low}'};
-lat(10,3) = {'Gated:b\textsubscript{high}'};
-lat(11,3) = {'1-Nav:b\textsubscript{high}'};
-lat(12,3) = {'Multi-Nav:b\textsubscript{high}'};
+lat(2,3) = {'CS'};
+lat(3,3) = {'Gate'};
+lat(4,3) = {'Nav'};
+lat(7,3) = {'CS:b\textsubscript{low}'};
+lat(8,3) = {'Gate:b\textsubscript{low}'};
+lat(9,3) = {'Nav:b\textsubscript{low}'};
+lat(10,3) = {'CS:b\textsubscript{high}'};
+lat(11,3) = {'Gate:b\textsubscript{high}'};
+lat(12,3) = {'Nav:b\textsubscript{high}'};
 
 lat([1 4 5 6 9],13) = {'\addlinespace'};
 lat(12,13) = {'\bottomrule'};

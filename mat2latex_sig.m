@@ -1,15 +1,15 @@
 function [tblSumm,tblMain,tblBval,tblAll,tblSE,lat1,lat2] = mat2latex_sig(lme,se)
 
-%all techniques, bref 15, bhigh 350
+%all techniques, bref 50, bhigh 350
 tblSumm = [lme{1,1};...
     lme{2,1};...
     lme{3,1};...
     lme{4,1}];
 
-%BH technique, bref 15, bhigh 350
+%BH technique, bref 50, bhigh 350
 tblMain = lme{1,1};
 
-%all techniques, bref 15, bhigh 350, no interactions
+%all techniques, bref 50, bhigh 350, no interactions
 tblBval = [lme{1,1}(1:6,:);...
     lme{2,1}([1 3:6],:);...
     lme{3,1}([1 4:6],:);...
@@ -59,10 +59,10 @@ tmpBval = tblBval([5:6 10:11 14:15 17:18],:);
 p = tblAll.pValue;
 [sort_p,ind] = sort(p);
 [~,ind2] = sort(ind);
-[sort_corr_p,sort_h] = bonf_holm(sort_p(11:end),alpha);
-sort_corr_p = [nan(10,1);sort_corr_p];
+[sort_corr_p,sort_h] = bonf_holm(sort_p(7:end),alpha);
+sort_corr_p = [nan(6,1);sort_corr_p];
 corr_p = sort_corr_p(ind2);
-sort_h = [nan(10,1);sort_h];
+sort_h = [nan(6,1);sort_h];
 h = sort_h(ind2);
 
 tblAll.corr_pValue = corr_p;
@@ -81,9 +81,9 @@ lat1(4,19) = {'\bottomrule'};
 
 %% fixed factors
 lat1(1,1) = {'BH'};
-lat1(2,1) = {'Gated'};
-lat1(3,1) = {'1-Nav'};
-lat1(4,1) = {'Multi-Nav'};
+lat1(2,1) = {'CS'};
+lat1(3,1) = {'Gate'};
+lat1(4,1) = {'Nav'};
 
 %% add estimates, CI
 rfx = @(x,xpnt) [sign(x).*10.^(log10(abs(x))-xpnt), xpnt]; 
@@ -115,7 +115,7 @@ for i=1:sz(1)
 end
 
 %% create empty table
-sz = [10 35];%sz = [11 29];
+sz = [6 35];%sz = [11 29];
 varTypes = repmat({'string'},1,sz(2));
 lat2 = table('Size',sz,'VariableTypes',varTypes);
 
@@ -123,18 +123,18 @@ lat2 = table('Size',sz,'VariableTypes',varTypes);
 lat2(:,2:2:32) = {'&'};
 lat2(:,34) = {'\\'};
 lat2(:,[1 35]) = {''};
-lat2([4 8],35) = {'\addlinespace'};
-lat2(10,35) = {'\bottomrule'};
+lat2(4,35) = {'\addlinespace'};
+lat2(6,35) = {'\bottomrule'};
 
 %% name of factor
-lat2(1:10,1) = {'$\cdot$'};
-lat2(1,1) = {'\multirow[t]{4}{*}{15}'};
-lat2(5,1) = {'\multirow[t]{4}{*}{50}'};
-lat2(9,1) = {'\multirow[t]{3}{*}{350}'};
-lat2([1 5],3) = {'350'};
-lat2([2 6],3) = {'450'};
-lat2([3 7 9],3) = {'550'};
-lat2([4 8 10],3) = {'650'};
+lat2(1:6,1) = {'$\cdot$'};
+% lat2(1,1) = {'\multirow[t]{4}{*}{15}'};
+lat2(1,1) = {'\multirow[t]{4}{*}{50}'};
+lat2(5,1) = {'\multirow[t]{3}{*}{350}'};
+lat2(1,3) = {'350'};
+lat2(2,3) = {'450'};
+lat2([3 5],3) = {'550'};
+lat2([4 6],3) = {'650'};
 
 %% add estimates, CI
 % format = '%#0.2g'; %print 2 significant digits (include trailing zeros)
