@@ -69,27 +69,25 @@ tblAll.corr_pValue = corr_p;
 tblAll.h = h;
 
 %% create empty table
-sz = [4 19];
+sz = [4 18];
 varTypes = repmat({'string'},1,sz(2));
 lat1 = table('Size',sz,'VariableTypes',varTypes);
 
 %% fill columns with column breaks and line breaks
 lat1(:,2:2:16) = {'&'};
 lat1(:,18) = {'\\'};
-lat1(:,19) = {''};
-lat1(4,19) = {'\bottomrule'};
 
 %% fixed factors
-lat1(1,1) = {'BH'};
-lat1(2,1) = {'CS'};
-lat1(3,1) = {'Gate'};
-lat1(4,1) = {'Nav'};
+lat1(1,1) = {'\textbf{BH}'};
+lat1(2,1) = {'\textbf{CS}'};
+lat1(3,1) = {'\textbf{Gate}'};
+lat1(4,1) = {'\textbf{Nav}'};
 
 %% add estimates, CI
-rfx = @(x,xpnt) [sign(x).*10.^(log10(abs(x))-xpnt), xpnt]; 
+rfx = @(x,xpnt) sign(x).*10.^(log10(abs(x))-xpnt); 
 % format = '%#0.2ge%d'; %print 2 significant digits (include trailing zeros)
-format = '%0.2fe%d'; %print 2 digits
-note = {{''} {'\superbold{*}'} {'\superbold{**}'} {'\superbold{***}'}};
+format = '%0.2f'; %print 2 digits
+note = {{''} {'$^{*}$'} {'$^{**}$'} {'$^{***}$'}};
 
 est = tblBval.Estimate;
 low = tblBval.Lower;
@@ -115,22 +113,20 @@ for i=1:sz(1)
 end
 
 %% create empty table
-sz = [6 35];%sz = [11 29];
+sz = [6 34];%sz = [11 29];
 varTypes = repmat({'string'},1,sz(2));
 lat2 = table('Size',sz,'VariableTypes',varTypes);
 
 %% fixed factors
 lat2(:,2:2:32) = {'&'};
 lat2(:,34) = {'\\'};
-lat2(:,[1 35]) = {''};
-lat2(4,35) = {'\addlinespace'};
-lat2(6,35) = {'\bottomrule'};
+lat2(:,1) = {''};
 
 %% name of factor
 lat2(1:6,1) = {'$\cdot$'};
-% lat2(1,1) = {'\multirow[t]{4}{*}{15}'};
-lat2(1,1) = {'\multirow[t]{4}{*}{50}'};
-lat2(5,1) = {'\multirow[t]{3}{*}{350}'};
+% lat2(1,1) = {'15'};
+lat2(1,1) = {'50'};
+lat2(5,1) = {'350'};
 lat2(1,3) = {'350'};
 lat2(2,3) = {'450'};
 lat2([3 5],3) = {'550'};
@@ -139,8 +135,8 @@ lat2([4 6],3) = {'650'};
 %% add estimates, CI
 % format = '%#0.2g'; %print 2 significant digits (include trailing zeros)
 format = '%0.2f'; %print 2 digits
-% format = '%0.3f'; %print 2 digits
-note = {{''} {'\superbold{*}'} {'\superbold{**}'} {'\superbold{***}'}};
+% format = '%0.3f'; %print 3 digits
+note = {{''} {'$^{*}$'} {'$^{**}$'} {'$^{***}$'}};
 
 est = tblAll.Estimate;
 low = tblAll.Lower;
