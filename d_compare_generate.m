@@ -144,5 +144,40 @@ for ii=1:4
     ax2.Visible = 'off'; linkprop([ax1 ax2],'Position');
     export_fig(fullfile(fname,[tech '_ha.png']),'-png','-transparent','-r100');
     close(h)
-
 end
+
+dataDir = '/Volumes/mri/UserFolders/Steve/DiffusionData/_full_/oxford';
+f = fullfile(dataDir,'20211125_O3TPR_CD01_20632','15_sj_ep2d_diff_nav_steve');
+dirlisting = dir(fullfile(f,'**')); %find all in the main directory including subfolders
+notdir = arrayfun(@(x) ~x.isdir,dirlisting);
+dirlisting = dirlisting(notdir); %remove folders
+
+[~,~,ext] = arrayfun(@(x) fileparts(x.name),dirlisting,'UniformOutput',false);
+validExt = {'.ima', '.dcm'};
+valid = cellfun(@(x) ismember(x, validExt), ext);
+dirlisting = dirlisting(valid); %remove non-dicom files
+
+fullImg = [];
+jj=42;
+for j =(jj-6):jj
+    try
+        dcmInfo = dicominfo(fullfile(dirlisting(j).folder,dirlisting(j).name));
+    catch
+        fprintf('%s is not a dicom file\n',dirlisting(j).name); %hopefully this shouldn't happen
+        continue
+    end
+    image = double(dicomread(dcmInfo));
+    boundsx = 30:221;boundsy = 31:239;
+    if j==jj
+        boundsx = 30:256;
+    end
+    traceImg = image(boundsy,boundsx);
+    traceImg(traceImg==1024)=384;
+    % figure(2);imagesc(traceImg);
+    fullImg = [fullImg traceImg];
+end
+
+h = figure; imagesc(fullImg);
+axis off;axis equal;colormap gray
+export_fig(fullfile(fname,'breathing.png'),'-png','-transparent','-r100','-m5');
+close(h)
