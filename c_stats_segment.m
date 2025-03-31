@@ -63,7 +63,7 @@ display_on = 0; %1
 %%{
 type = 'MD';
 tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
-[av,med,quant,skew,kurt] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
+[bytech,all] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
 [p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
@@ -96,7 +96,7 @@ print_to_pdf(type,img_folder,display_on);
 %{
 type = 'FA';
 tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
-[av,med,quant,skew,kurt] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
+[bytech,all] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
 [p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
@@ -107,7 +107,7 @@ print_to_pdf(type,img_folder,display_on);
 %{
 type = 'HAg';
 tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
-[av,med,quant,skew,kurt] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
+[bytech,all] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
 [p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
