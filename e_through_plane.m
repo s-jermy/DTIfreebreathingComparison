@@ -22,7 +22,7 @@ files={
     fullfile(dataDir,'20250226_O3TPR_C21-06_26200','24_sj_ep2d_diff_nav_steve')...
 };
 
-% minnum = [17 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0];
+minnum = 17;
 
 for i = 1:length(files)
     dirlisting = dir(fullfile(files{i},'**')); %find all in the main directory including subfolders
@@ -34,31 +34,36 @@ for i = 1:length(files)
     valid = cellfun(@(x) ismember(x, validExt), ext);
     dirlisting = dirlisting(valid); %remove non-dicom files
 
-    % Nsum = 0;
-    % for j = 1:length(dirlisting)
+    Nsum = 0;
+    allpos(i).pos = [];
+    for j = 1:length(dirlisting)
         try
-            dcmInfo = dicominfo(fullfile(dirlisting(end).folder,dirlisting(end).name));
-            % dcmInfo = dicominfo(fullfile(dirlisting(j).folder,dirlisting(j).name));
+            % dcmInfo = dicominfo(fullfile(dirlisting(end).folder,dirlisting(end).name));
+            dcmInfo = dicominfo(fullfile(dirlisting(j).folder,dirlisting(j).name));
         catch
-            % fprintf('%s is not a dicom file\n',dirlisting(j).name); %hopefully this shouldn't happen
-            fprintf('%s is not a dicom file\n',dirlisting(end).name); %hopefully this shouldn't happen
+            fprintf('%s is not a dicom file\n',dirlisting(j).name); %hopefully this shouldn't happen
+            % fprintf('%s is not a dicom file\n',dirlisting(end).name); %hopefully this shouldn't happen
             continue
         end
         image = double(dicomread(dcmInfo));
-        % figure(1); imagesc(image);colormap gray;axis equal;
+        if j==1
+            figure(1); imagesc(image);colormap gray;axis equal;
+        end
 
-        % if j~=length(dirlisting)
-        %     boundsx = 30:221;boundsy = 31:239;
-        %     traceImg = image(boundsy,boundsx);
-        %     figure(2);imagesc(traceImg==1024);
-        %     [r,c] = find(traceImg==1024);
-        %     %midy = range(boundsy)/2+min(boundsy);
-        %     bins = 7;
-        %     [N,edges] = histcounts(r,[0 (boundsy-min(boundsy)+1)]);
-        %     Nsum = Nsum+fliplr(N)/bins;
-        %     edges = edges+minnum(i);
-        %     figure(3);histogram('BinEdges',edges,'BinCounts',Nsum)
-        % else
+        if j~=length(dirlisting)
+            boundsx = 30:221;boundsy = 31:239;
+            traceImg = image(boundsy,boundsx);
+            % figure(2);imagesc(traceImg==1024);
+            [r,c] = find(traceImg==1024);
+            %midy = range(boundsy)/2+min(boundsy);
+            bins = 7;
+            pos = r(1:bins:end);
+            allpos(i).pos = [allpos(i).pos; pos];
+            [N,edges] = histcounts(r,[0 (boundsy-min(boundsy)+1)]);
+            Nsum = Nsum+fliplr(N)/bins;
+            edges = edges+minnum;
+            % figure(3);histogram('BinEdges',edges,'BinCounts',Nsum)
+        else
             histImg = image;
         
             [r,c] = find(histImg==2000);
@@ -70,8 +75,8 @@ for i = 1:length(files)
             endIdx = find(d == -1) - 1;  % End of high-value segments
             segmentLengths = endIdx - startIdx + 1;
             maxLength(i) = max(segmentLengths, [], 'omitnan');  % Get the largest segment
-        % end
-    % end
+        end
+    end
 end
 
 files={
