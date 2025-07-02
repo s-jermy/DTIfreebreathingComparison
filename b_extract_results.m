@@ -83,10 +83,9 @@ ind = find(lowB2 == "b50");lowB2(ind) = repmat({'b050'},size(ind));
 tbl_segment.lowB = lowB;
 tbl_slice.lowB = lowB2;
 
-[~,~,ic] = unique(categorical(tbl_segment.tech));
-tbl_segment.tech = ic;
-[~,~,ic] = unique(categorical(tbl_slice.tech));
-tbl_slice.tech = ic;
+tech_valid = ["BH","CS","Gate","Nav","FB"];
+tbl_segment.tech = categorical(tbl_segment.tech,tech_valid);
+tbl_slice.tech = categorical(tbl_slice.tech,tech_valid);
 
 %% remove extra entry in segment sheet (average of myocardium)
 % exclude = find(ismember(tbl_seg.segment,7))';
