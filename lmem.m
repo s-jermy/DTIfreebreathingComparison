@@ -140,10 +140,10 @@ if display_on
     
     lowb_box = lowB1 + 6*(2/3*(tech_num-1)-1);
     hold on
-    plot(lowx(:,1),lowy(:,1),'LineStyle',':','LineWidth',6,'Color',c(1,:));
-    plot(lowx(:,2),lowy(:,2),'LineStyle',':','LineWidth',6.5,'Color',c(2,:));
-    plot(lowx(:,3),lowy(:,3),'LineStyle',':','LineWidth',7,'Color',c(3,:));
-    plot(lowx(:,4),lowy(:,4),'LineStyle',':','LineWidth',7.5,'Color',c(4,:));
+    plot(lowx(:,1),lowy(:,1),'LineStyle',':','LineWidth',10,'Color',c(1,:));
+    plot(lowx(:,2),lowy(:,2),'LineStyle',':','LineWidth',10,'Color',c(2,:));
+    plot(lowx(:,3),lowy(:,3),'LineStyle',':','LineWidth',10,'Color',c(3,:));
+    plot(lowx(:,4),lowy(:,4),'LineStyle',':','LineWidth',10,'Color',c(4,:));
     boxplot(tbl2.(type),{lowB1 tbl2.tech},'Positions',lowb_box,'PlotStyle','compact','Colors',c,'Symbol','','FactorGap',[]);
     hold off
     h=gca;h.Box = false;
@@ -151,21 +151,21 @@ if display_on
     h.YLim = [m M]; h.XLim = [0 400];h.YGrid = 'on';set(h.YGridHandle,'LineWidth',2);
 %     h.Title.String = sprintf('%s by tech and low b-value',type);
 %     h.YLabel.String = sprintf('%s',format); h.XLabel.String = sprintf('b_{low} (s/mm^2)');
-    h.FontSize = 30;%h.TitleFontSizeMultiplier = 1.5;h.LabelFontSizeMultiplier = 1.5;
+    h.FontSize = 40;h.TitleFontSizeMultiplier = 1.5;h.LabelFontSizeMultiplier = 1.5;
     h.Parent.Name = sprintf('lme%s_lowb_fit',type);h.Parent.Tag = num2str(8/5);
     
-    set(findobj(gcf,'Type','line','Tag','Box'),'LineWidth',9);
-    set(findobj(gcf,'Type','line','Tag','Whisker'),'LineWidth',3);
+    set(findobj(gcf,'Type','line','Tag','Box'),'LineWidth',12);
+    set(findobj(gcf,'Type','line','Tag','Whisker'),'LineWidth',5);
     
     figure;
     highx = highx+9*(2/3*(0:3)-1);
     
     highb_box = tbl.highB1 + 9*(2/3*(tech_num-1)-1);
     hold on
-    plot(highx(:,1),highy(:,1),'LineStyle',':','LineWidth',6,'Color',c(1,:));
-    plot(highx(:,2),highy(:,2),'LineStyle',':','LineWidth',6.5,'Color',c(2,:));
-    plot(highx(:,3),highy(:,3),'LineStyle',':','LineWidth',7,'Color',c(3,:));
-    plot(highx(:,4),highy(:,4),'LineStyle',':','LineWidth',7.5,'Color',c(4,:));
+    plot(highx(:,1),highy(:,1),'LineStyle',':','LineWidth',10,'Color',c(1,:));
+    plot(highx(:,2),highy(:,2),'LineStyle',':','LineWidth',10,'Color',c(2,:));
+    plot(highx(:,3),highy(:,3),'LineStyle',':','LineWidth',10,'Color',c(3,:));
+    plot(highx(:,4),highy(:,4),'LineStyle',':','LineWidth',10,'Color',c(4,:));
     boxplot(tbl2.(type),{tbl2.highB1 tbl2.tech},'Positions',highb_box,'PlotStyle','compact','Colors',c,'Symbol','','FactorGap',[]);
     hold off
     h=gca;h.Box = false;
@@ -173,11 +173,11 @@ if display_on
     h.YLim = [m M]; h.XLim = [300 700];h.YGrid = 'on';set(h.YGridHandle,'LineWidth',2);
 %     h.Title.String = sprintf('%s by tech and high b-value',type);
 %     h.YLabel.String = sprintf('%s',format); h.XLabel.String = sprintf('b_{high} (s/mm^2)');
-    h.FontSize = 30;%h.TitleFontSizeMultiplier = 1.5;h.LabelFontSizeMultiplier = 1.5;
+    h.FontSize = 40;h.TitleFontSizeMultiplier = 1.5;h.LabelFontSizeMultiplier = 1.5;
     h.Parent.Name = sprintf('lme%s_highb_fit',type);h.Parent.Tag = num2str(8/5);
     
-    set(findobj(gcf,'Type','line','Tag','Box'),'LineWidth',9);
-    set(findobj(gcf,'Type','line','Tag','Whisker'),'LineWidth',3);
+    set(findobj(gcf,'Type','line','Tag','Box'),'LineWidth',12);
+    set(findobj(gcf,'Type','line','Tag','Whisker'),'LineWidth',5);
 end
 
 end
