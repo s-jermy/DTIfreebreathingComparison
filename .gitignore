@@ -1,13 +1,5 @@
-
-old/choose_model.m
-old/choose_model_AD.m
-old/choose_model_FA.m
-old/compare_generate.m
-old/display_figures.m
-old/jetb.m
-old/stats.m
-old/stats_categorical.m
-old/test.m
+/old
+/figures
 *.mat
 *.png
 *.xlsx
