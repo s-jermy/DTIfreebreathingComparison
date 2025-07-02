@@ -7,7 +7,7 @@ if display_on
     warning('on');
     
     fig = findall(groot,'Type','figure');
-    for num = 1:numel(fig)
+    for num = fliplr(1:numel(fig))
         h = fig(num); %or choose the figure you want to print
         h.Units = 'pixels';
         filename = ['fig' num2str(h.Number) '_' h.Name]; %set filename
@@ -25,7 +25,7 @@ if display_on
 %         print(h,fullfile(cur_folder,filename),'-depsc','-tiff','-loose');
         exportgraphics(h,fullfile(cur_folder,[filename '.tif']),'BackgroundColor','none','Resolution',300);
 %         warning off export_fig:exportgraphics
-%         export_fig(fullfile(cur_folder,filename),'-eps','-transparent',h);
+        % export_fig(fullfile(cur_folder,[filename '.tif']),'-tif','-transparent',h);
 %         warning on
 
 %         set(h,'PaperUnits','Centimeters');
