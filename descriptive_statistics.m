@@ -1,6 +1,6 @@
 %%% requires Statistics and Machine Learning Toolbox
 
-function [stats_tech,stats_all] = descriptive_statistics(tbl,type,outl_sd,display_on)
+function [stats_tech,stats_all] = descriptive_statistics(tbl,type,outl_sd,display_on,tbl2025)
 
 switch type
     case {'MD','AD','RD'}
@@ -72,7 +72,7 @@ if display_on
     fprintf('Skewness and kurtosis of %s\n',type);
     fprintf('%.4f\t%.4f\n',stats_all.skew,stats_all.kurt);
     
-    boxplots(tbl,type,outl_sd,0);
+    boxplots(tbl,type,outl_sd,0,tbl2025);
 end
 
 end

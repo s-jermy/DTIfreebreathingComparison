@@ -93,7 +93,7 @@ if display_on
     h.Parent.Name = sprintf('lme%s_qq',type);h.Parent.Tag = num2str(1);
     
     tbl.(type) = F;
-    boxplots(tbl,type,outl_sd,1);
+    boxplots(tbl,type,outl_sd,1,[]);
 end
 
 %% extract fit line

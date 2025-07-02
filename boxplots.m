@@ -1,4 +1,4 @@
-function boxplots(tbl,type,outl_sd,islme)
+function boxplots(tbl,type,outl_sd,islme,tbl2)
 
 %finding outliers
 Z = zscore(tbl.(type));
@@ -39,15 +39,24 @@ if islme
     type2 = ['lme' type];
     % format = ['Fitted ' format];
 end
+
+extra = false;
+if ~isempty(tbl2)
+    extra = true;
 end
 
 c = 1/255*[[68 114 196];[165 165 165];[255 192 0];[237 125 49]]; %BH/CS/Gate/Nav
+c2 = 1/255*[[68 114 196];[255 192 0];[237 125 49]]; %BH/Gate/Nav
 
 %% boxplots
 
 tech_num = ones(size(tbl,1),1);
 tech_num(tbl.tech == 'CS') = 2; tech_num(tbl.tech == 'Gate') = 3; tech_num(tbl.tech == 'Nav') = 4; %this is to get around the fact that gscatter can't properly handle categorical variables
 
+if extra
+    tech_num2 = ones(size(tbl2,1),1);
+    tech_num2(tbl2.tech == 'Gate') = 3; tech_num2(tbl2.tech == 'Nav') = 4;
+end
 
 %% tech
 jamount = 1/4;
@@ -61,6 +70,16 @@ for i = 1:length(g)
     set(g(i).MarkerHandle,'FaceColorType','truecoloralpha','FaceColorData',uint8(255*[c(i,:)';0.5]));
 end
 hold on
+if extra
+    jamount = 1/6;
+    jitter2 = jamount*(rand(height(tbl2),1)-0.5);
+    tech_scatter2 = tech_num2+jitter2+3/5;
+    g2 = gscatter(tech_scatter2,tbl2.(type),{tbl2.tech},c2,'^',10,'off','','');
+    for i = 1:length(g2)
+        set(g2(i),'MarkerEdgeColor','none','MarkerFaceColor',c2(i,:));drawnow;
+        set(g2(i).MarkerHandle,'FaceColorType','truecoloralpha','FaceColorData',uint8(255*[c2(i,:)';0.5]));
+    end
+end
 boxplot(tbl.(type),{tbl.tech},'PlotStyle','compact','Colors',c,'Symbol','','FactorGap',[]);
 hold off
 h=gca;h.Box = false;
@@ -89,6 +108,18 @@ for i = 1:length(g)
     set(g(i).MarkerHandle,'FaceColorType','truecoloralpha','FaceColorData',uint8(255*[c(i,:)';0.5]));
 end
 hold on
+if extra
+    jamount = 8;
+    jitter2 = jamount*(rand(height(tbl2),1)-0.5);
+    lowB12 = tbl2.lowB1;lowB12 = lowB12-200*(lowB12>100);
+    lowb_scatter2 = lowB12+jitter2+40;
+    lowb_scatter2(lowB12==15) = lowb_scatter2(lowB12==15)-70; %moves scatter to left side of 15
+    g2 = gscatter(lowb_scatter2,tbl2.(type),{tbl2.tech},c2,'^',10,'off','','');
+    for i = 1:length(g2)
+        set(g2(i),'MarkerEdgeColor','none','MarkerFaceColor',c2(i,:));drawnow;
+        set(g2(i).MarkerHandle,'FaceColorType','truecoloralpha','FaceColorData',uint8(255*[c2(i,:)';0.5]));
+    end
+end
 boxplot(tbl.(type),{lowB1 tbl.tech},'Positions',lowb_box,'PlotStyle','compact','Colors',c,'Symbol','','FactorGap',[]);
 hold off
 h=gca;h.Box = false;
@@ -112,6 +143,15 @@ for i = 1:length(g)
     set(g(i).MarkerHandle,'FaceColorType','truecoloralpha','FaceColorData',uint8(255*[c(i,:)';0.5]));
 end
 hold on
+if extra
+    ind2 = find(tbl2.highB=='b350');
+    tbltemp2 = tbl2(ind2,:);
+    g2 = gscatter(lowb_scatter2(ind2),tbltemp2.(type),{tbltemp2.tech},c2,'^',10,'off','','');
+    for i = 1:length(g2)
+        set(g2(i),'MarkerEdgeColor','none','MarkerFaceColor',c2(i,:));drawnow;
+        set(g2(i).MarkerHandle,'FaceColorType','truecoloralpha','FaceColorData',uint8(255*[c2(i,:)';0.5]));
+    end
+end
 boxplot(tbltemp.(type),{lowB1(ind) tbltemp.tech},'Positions',lowb_box(ind),'PlotStyle','compact','Colors',c,'Symbol','','FactorGap',[],'Width',0.5);
 hold off
 h=gca;h.Box = false;
@@ -131,6 +171,15 @@ for i = 1:length(g)
     set(g(i).MarkerHandle,'FaceColorType','truecoloralpha','FaceColorData',uint8(255*[c(i,:)';0.5]));
 end
 hold on
+if extra
+    ind2 = find(tbl2.highB=='b450');
+    tbltemp2 = tbl2(ind2,:);
+    g2 = gscatter(lowb_scatter2(ind2),tbltemp2.(type),{tbltemp2.tech},c2,'^',10,'off','','');
+    for i = 1:length(g2)
+        set(g2(i),'MarkerEdgeColor','none','MarkerFaceColor',c2(i,:));drawnow;
+        set(g2(i).MarkerHandle,'FaceColorType','truecoloralpha','FaceColorData',uint8(255*[c2(i,:)';0.5]));
+    end
+end
 boxplot(tbltemp.(type),{lowB1(ind) tbltemp.tech},'Positions',lowb_box(ind),'PlotStyle','compact','Colors',c,'Symbol','','FactorGap',[]);
 hold off
 h=gca;h.Box = false;
@@ -150,6 +199,15 @@ for i = 1:length(g)
     set(g(i).MarkerHandle,'FaceColorType','truecoloralpha','FaceColorData',uint8(255*[c(i,:)';0.5]));
 end
 hold on
+if extra
+    ind2 = find(tbl2.highB=='b550');
+    tbltemp2 = tbl2(ind2,:);
+    g2 = gscatter(lowb_scatter2(ind2),tbltemp2.(type),{tbltemp2.tech},c2,'^',10,'off','','');
+    for i = 1:length(g2)
+        set(g2(i),'MarkerEdgeColor','none','MarkerFaceColor',c2(i,:));drawnow;
+        set(g2(i).MarkerHandle,'FaceColorType','truecoloralpha','FaceColorData',uint8(255*[c2(i,:)';0.5]));
+    end
+end
 boxplot(tbltemp.(type),{lowB1(ind) tbltemp.tech},'Positions',lowb_box(ind),'PlotStyle','compact','Colors',c,'Symbol','','FactorGap',[]);
 hold off
 h=gca;h.Box = false;
@@ -169,6 +227,15 @@ for i = 1:length(g)
     set(g(i).MarkerHandle,'FaceColorType','truecoloralpha','FaceColorData',uint8(255*[c(i,:)';0.5]));
 end
 hold on
+if extra
+    ind2 = find(tbl2.highB=='b650');
+    tbltemp2 = tbl2(ind2,:);
+    g2 = gscatter(lowb_scatter2(ind2),tbltemp2.(type),{tbltemp2.tech},c2,'^',10,'off','','');
+    for i = 1:length(g2)
+        set(g2(i),'MarkerEdgeColor','none','MarkerFaceColor',c2(i,:));drawnow;
+        set(g2(i).MarkerHandle,'FaceColorType','truecoloralpha','FaceColorData',uint8(255*[c2(i,:)';0.5]));
+    end
+end
 boxplot(tbltemp.(type),{lowB1(ind) tbltemp.tech},'Positions',lowb_box(ind),'PlotStyle','compact','Colors',c,'Symbol','','FactorGap',[]);
 hold off
 h=gca;h.Box = false;
@@ -197,6 +264,16 @@ for i = 1:length(g)
     set(g(i).MarkerHandle,'FaceColorType','truecoloralpha','FaceColorData',uint8(255*[c(i,:)';0.5]));
 end
 hold on
+if extra
+    jamount = 8;
+    jitter2 = jamount*(rand(height(tbl2),1)-0.5);
+    highb_scatter2 = tbl2.highB1+jitter2+40;
+    g2 = gscatter(highb_scatter2,tbl2.(type),{tbl2.tech},c2,'^',10,'off','','');
+    for i = 1:length(g2)
+        set(g2(i),'MarkerEdgeColor','none','MarkerFaceColor',c2(i,:));drawnow;
+        set(g2(i).MarkerHandle,'FaceColorType','truecoloralpha','FaceColorData',uint8(255*[c2(i,:)';0.5]));
+    end
+end
 boxplot(tbl.(type),{tbl.highB1 tbl.tech},'Positions',highb_box,'PlotStyle','compact','Colors',c,'Symbol','','FactorGap',[]);
 hold off
 h=gca;h.Box = false;
@@ -221,6 +298,15 @@ for i = 1:length(g)
     set(g(i).MarkerHandle,'FaceColorType','truecoloralpha','FaceColorData',uint8(255*[c(i,:)';0.5]));
 end
 hold on
+if extra
+    ind2 = find(tbl2.lowB=='b050');
+    tbltemp2 = tbl2(ind2,:);
+    g2 = gscatter(highb_scatter2(ind2),tbltemp2.(type),{tbltemp2.tech},c2,'^',10,'off','','');
+    for i = 1:length(g2)
+        set(g2(i),'MarkerEdgeColor','none','MarkerFaceColor',c2(i,:));drawnow;
+        set(g2(i).MarkerHandle,'FaceColorType','truecoloralpha','FaceColorData',uint8(255*[c2(i,:)';0.5]));
+    end
+end
 boxplot(tbltemp.(type),{tbltemp.highB1 tbltemp.tech},'Positions',highb_box(ind),'PlotStyle','compact','Colors',c,'Symbol','','FactorGap',[]);
 hold off
 h=gca;h.Box = false;
@@ -242,6 +328,15 @@ for i = 1:length(g)
     set(g(i).MarkerHandle,'FaceColorType','truecoloralpha','FaceColorData',uint8(255*[c(i,:)';0.5]));
 end
 hold on
+if extra
+    ind2 = find(tbl2.lowB=='b350');
+    tbltemp2 = tbl2(ind2,:);
+    g2 = gscatter(highb_scatter2(ind2),tbltemp2.(type),{tbltemp2.tech},c2,'^',10,'off','','');
+    for i = 1:length(g2)
+        set(g2(i),'MarkerEdgeColor','none','MarkerFaceColor',c2(i,:));drawnow;
+        set(g2(i).MarkerHandle,'FaceColorType','truecoloralpha','FaceColorData',uint8(255*[c2(i,:)';0.5]));
+    end
+end
 boxplot(tbltemp.(type),{tbltemp.highB1 tbltemp.tech},'Positions',highb_box(ind),'PlotStyle','compact','Colors',c,'Symbol','','FactorGap',[]);
 hold off
 h=gca;h.Box = false;

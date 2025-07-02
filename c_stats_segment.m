@@ -27,13 +27,27 @@ bAll.Slice = categorical(bAll.Slice);
 bAll.lowB = categorical(bAll.lowB);
 bAll.highB = categorical(bAll.highB);
 
+%% load 2025 data
+listing = dir(fullfile(main,'resources','data2025','data_*.xlsx')); %find dti spreadsheet in the main directory including subfolders
+xlfile = fullfile(listing(1).folder,listing(1).name);
+
+ds = spreadsheetDatastore(xlfile);
+ds.Sheets = 'segment';
+b2025 = read(ds);
+
+b2025.ID = categorical(b2025.ID);
+b2025.tech = categorical(b2025.tech);
+b2025.Slice = categorical(b2025.Slice);
+b2025.lowB = categorical(b2025.lowB);
+b2025.highB = categorical(b2025.highB);
+
 %% segments
 valueset2 = (1:16); catnames2 = {'A','AS','IS','I','IL','AL','A','AS','IS','I','IL','AL','A','S','I','L'};
-% valueset3 = (13:16); catnames3 = {'A','S','I','L'};
-% ind = find(bAll.Slice == "Apex");
 seg = categorical(bAll.segment,valueset2,catnames2);
-% seg(ind) = categorical(bAll.segment(ind),valueset3,catnames3);
 bAll.segment = seg;
+
+seg = categorical(b2025.segment,valueset2,catnames2);
+b2025.segment = seg;
 
 %% change lowB from categorical to continuous
 ind = find(bAll.lowB == "b015");
@@ -42,6 +56,13 @@ ind = find(bAll.lowB == "b050");
 bAll.lowB1(ind) = repmat(50,size(ind));
 ind = find(bAll.lowB == "b350");
 bAll.lowB1(ind) = repmat(350,size(ind));
+
+ind = find(b2025.lowB == "b015");
+b2025.lowB1(ind) = repmat(15,size(ind));
+ind = find(b2025.lowB == "b050");
+b2025.lowB1(ind) = repmat(50,size(ind));
+ind = find(b2025.lowB == "b350");
+b2025.lowB1(ind) = repmat(350,size(ind));
 
 %% change highB from categorical to continuous
 ind = find(bAll.highB == "b350");
@@ -53,17 +74,28 @@ bAll.highB1(ind) = repmat(550,size(ind));
 ind = find(bAll.highB == "b650");
 bAll.highB1(ind) = repmat(650,size(ind));
 
+ind = find(b2025.highB == "b350");
+b2025.highB1(ind) = repmat(350,size(ind));
+ind = find(b2025.highB == "b450");
+b2025.highB1(ind) = repmat(450,size(ind));
+ind = find(b2025.highB == "b550");
+b2025.highB1(ind) = repmat(550,size(ind));
+ind = find(b2025.highB == "b650");
+b2025.highB1(ind) = repmat(650,size(ind));
+
 %%
 tbl_inf = bAll(:,[1:6 25:26]);
+tbl_inf_2025 = b2025(:,[1:6 25:26]);
 outl_sd = 4; %3
 mdl = 2; %1
-display_on = 0; %1
+display_on = 1; %1
 
 %% MD - mean diffusivity
 %%{
 type = 'MD';
 tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
-[bytech,all] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
+tbl_dat_2025 = [tbl_inf_2025 b2025(:,type) b2025(:,[type 'std'])];
+[stats_tech,stats_all] = descriptive_statistics(tbl_dat,type,outl_sd,display_on,tbl_dat_2025);
 [p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
@@ -96,7 +128,8 @@ print_to_pdf(type,img_folder,display_on);
 %{
 type = 'FA';
 tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
-[bytech,all] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
+tbl_dat_2025 = [tbl_inf_2025 b2025(:,type) b2025(:,[type 'std'])];
+[stats_tech,stats_all] = descriptive_statistics(tbl_dat,type,outl_sd,display_on,tbl_dat_2025);
 [p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
@@ -107,7 +140,8 @@ print_to_pdf(type,img_folder,display_on);
 %{
 type = 'HAg';
 tbl_dat = [tbl_inf bAll(:,type) bAll(:,[type 'std'])];
-[bytech,all] = descriptive_statistics(tbl_dat,type,outl_sd,display_on);
+tbl_dat_2025 = [tbl_inf_2025 b2025(:,type) b2025(:,[type 'std'])];
+[stats_tech,stats_all] = descriptive_statistics(tbl_dat,type,outl_sd,display_on,tbl_dat_2025);
 [p,h] = variance_analysis(tbl_dat,type,outl_sd,display_on);
 [lme,coeff,latLME] = lmem(tbl_dat,type,outl_sd,mdl,display_on);
 [tblSumm,tblMain,tblBval,tblAll,tblSE,latTech,latBval] = sigInt(tbl_dat,type,outl_sd,mdl);
