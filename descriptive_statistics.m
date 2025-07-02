@@ -1,6 +1,6 @@
 %%% requires Statistics and Machine Learning Toolbox
 
-function [bytech,all] = descriptive_statistics(tbl,type,outl_sd,display_on)
+function [stats_tech,stats_all] = descriptive_statistics(tbl,type,outl_sd,display_on)
 
 switch type
     case {'MD','AD','RD'}
@@ -36,41 +36,41 @@ if display_on
 end
 
 p = 0:0.25:1;
-all.quant = quantile(tbl2.(type),p);
-all.av = mean(tbl2.(type));
-all.sd = std(tbl2.(type));
-all.med = median(tbl2.(type));
-all.skew = skewness(tbl2.(type));
-all.kurt = kurtosis(tbl2.(type));
+stats_all.quant = quantile(tbl2.(type),p);
+stats_all.av = mean(tbl2.(type));
+stats_all.sd = std(tbl2.(type));
+stats_all.med = median(tbl2.(type));
+stats_all.skew = skewness(tbl2.(type));
+stats_all.kurt = kurtosis(tbl2.(type));
 
 t = unique(tbl2.tech);
 b = unique(tbl2.lowB);
-bytech.quant = zeros([length(t) length(p) length(b)+1]);
+stats_tech.quant = zeros([length(t) length(p) length(b)+1]);
 
 for i = 1:length(t)
-    bytech.quant(i,:,1) = quantile(tbl2.(type)(tbl2.tech==t(i)),p);
-    bytech.av(i,1) = mean(tbl2.(type)(tbl2.tech==t(i)));
-    bytech.sd(i,1) = std(tbl2.(type)(tbl2.tech==t(i)));
-    bytech.med(i,1) = median(tbl2.(type)(tbl2.tech==t(i)));
-    bytech.skew(i,1) = skewness(tbl2.(type)(tbl2.tech==t(i)));
-    bytech.kurt(i,1) = kurtosis(tbl2.(type)(tbl2.tech==t(i)));
+    stats_tech.quant(i,:,1) = quantile(tbl2.(type)(tbl2.tech==t(i)),p);
+    stats_tech.av(i,1) = mean(tbl2.(type)(tbl2.tech==t(i)));
+    stats_tech.sd(i,1) = std(tbl2.(type)(tbl2.tech==t(i)));
+    stats_tech.med(i,1) = median(tbl2.(type)(tbl2.tech==t(i)));
+    stats_tech.skew(i,1) = skewness(tbl2.(type)(tbl2.tech==t(i)));
+    stats_tech.kurt(i,1) = kurtosis(tbl2.(type)(tbl2.tech==t(i)));
     for j = 1:length(b)
-        bytech.quant(i,:,j+1) = quantile(tbl2.(type)(tbl2.tech==t(i)&tbl2.lowB==b(j)),p);
-        bytech.av(i,j+1) = mean(tbl2.(type)(tbl2.tech==t(i)&tbl2.lowB==b(j)));
-        bytech.sd(i,j+1) = std(tbl2.(type)(tbl2.tech==t(i)&tbl2.lowB==b(j)));
-        bytech.med(i,j+1) = median(tbl2.(type)(tbl2.tech==t(i)&tbl2.lowB==b(j)));
-        bytech.skew(i,j+1) = skewness(tbl2.(type)(tbl2.tech==t(i)&tbl2.lowB==b(j)));
-        bytech.kurt(i,j+1) = kurtosis(tbl2.(type)(tbl2.tech==t(i)&tbl2.lowB==b(j)));
+        stats_tech.quant(i,:,j+1) = quantile(tbl2.(type)(tbl2.tech==t(i)&tbl2.lowB==b(j)),p);
+        stats_tech.av(i,j+1) = mean(tbl2.(type)(tbl2.tech==t(i)&tbl2.lowB==b(j)));
+        stats_tech.sd(i,j+1) = std(tbl2.(type)(tbl2.tech==t(i)&tbl2.lowB==b(j)));
+        stats_tech.med(i,j+1) = median(tbl2.(type)(tbl2.tech==t(i)&tbl2.lowB==b(j)));
+        stats_tech.skew(i,j+1) = skewness(tbl2.(type)(tbl2.tech==t(i)&tbl2.lowB==b(j)));
+        stats_tech.kurt(i,j+1) = kurtosis(tbl2.(type)(tbl2.tech==t(i)&tbl2.lowB==b(j)));
     end
 end
 
 if display_on
     fprintf('Quantiles of %s\n',type);
-    fprintf('%.4f\t',p);fprintf('\n');fprintf('%.4f\t',quant_all);fprintf('\n');
+    fprintf('%.4f\t',p);fprintf('\n');fprintf('%.4f\t',stats_all.quant);fprintf('\n');
     fprintf('Mean and median of %s\n',type);
-    fprintf('%.4f\t%.4f\n',av_all,med_all);
+    fprintf('%.4f\t%.4f\n',stats_all.av,stats_all.med);
     fprintf('Skewness and kurtosis of %s\n',type);
-    fprintf('%.4f\t%.4f\n',skew_all,kurt_all);
+    fprintf('%.4f\t%.4f\n',stats_all.skew,stats_all.kurt);
     
     boxplots(tbl,type,outl_sd,0);
 end
