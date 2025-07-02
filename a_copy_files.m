@@ -15,15 +15,16 @@ temp = split(load2,filesep);
 save2 = uigetdir(save1,'Choose folder to save to...');
 save2 = fullfile(save2,'data');
 
-list = dir(load2);
-list = list(3:end); %remove . .. directories
+listing = dir(load2);
+listing = listing([listing.isdir]);
+listing = listing(~ismember({listing.name},{'.','..'}));
 
 copyImages = 1; %0;
 
 %% main loop
-for j = 1:length(list)
+for j = 1:length(listing)
     %% get subject and list methods
-    l_subj = list(j).name;
+    l_subj = listing(j).name;
     s_subj = l_subj;
     
     %some mislabeled subjects to look out for
@@ -41,13 +42,16 @@ for j = 1:length(list)
         end
     end
     
-    list2 = dir(fullfile(load2,l_subj));
-    list2 = list2(3:end);
+    listing2 = dir(fullfile(load2,l_subj,'**','Paths.mat'));
     
     %% copy spreadsheet of results (and images) out of each methods folder
-    for i = 1:length(list2)
-        l_meth = list2(i).name;
-        s_meth = l_meth;
+    for i = 1:length(listing2)
+        f = listing2(i).folder;
+        temp2 = split(f,filesep);
+        load(fullfile(f,listing2(i).name),"analysisTag");
+
+        l_meth = analysisTag;
+        s_meth = temp2{end};
         
         %mislabeled methods
         % if strcmp(temp{end},'steve_oxford_2021')
@@ -56,7 +60,7 @@ for j = 1:length(list)
         %     end
         % end
         
-        l_file = fullfile(load2,l_subj,l_meth,[l_meth '.xlsx']);
+        l_file = fullfile(f,l_meth,[l_meth '.xlsx']);
         s_fold = fullfile(save2,s_subj,s_meth);
         
         warning('off','MATLAB:MKDIR:DirectoryExists')
@@ -69,7 +73,7 @@ for j = 1:length(list)
         
         %% not every experiment has base mid and apex images
         if copyImages
-            l_temp = fullfile(load2,l_subj,l_meth);
+            l_temp = fullfile(f,l_meth);
             
             load3 = fullfile(l_temp,l_rej);
             save3 = fullfile(s_fold,l_rej);
