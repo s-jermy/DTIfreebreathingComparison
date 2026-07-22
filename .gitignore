@@ -5,3 +5,4 @@
 *.xlsx
 *.asv
 .DS_Store
+d_compare_generate copy.m
