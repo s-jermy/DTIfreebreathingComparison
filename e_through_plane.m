@@ -27,7 +27,8 @@ edges2 = repmat(1:68,length(files),1);
 sz = size(edges2);
 Nsum2 = zeros(sz(1),sz(2)-1);
 
-for i = 1:length(files)
+%for i = 1:length(files)
+i=4;
     dirlisting = dir(fullfile(files{i},'**')); %find all in the main directory including subfolders
     notdir = arrayfun(@(x) ~x.isdir,dirlisting);
     dirlisting = dirlisting(notdir); %remove folders
@@ -38,7 +39,7 @@ for i = 1:length(files)
     dirlisting = dirlisting(valid); %remove non-dicom files
 
     Nsum = 0;
-    allpos(i).pos = [];
+    allpos(i).pos = [];  % convert from pos to actual navigator position (209 - pos + minnum)
     l = length(dirlisting);
     for j = 12:l %skip the first set of training data
         try
@@ -111,11 +112,11 @@ for i = 1:length(files)
             iqrLength(i) = value_iqr;
             midLength(i) = value_90;
             twoSdLength(i) = value_95;
-            maxLength(i) = max(segmentLengths, [], 'omitnan');  % Get the largest segment
+            maxzLength(i) = max(segmentLengths, [], 'omitnan');  % Get the largest segment
             figure(3);histogram('BinEdges',edges,'BinCounts',Nsum)
         end
     end
-end
+% end
 
 files={
     fullfile(dataDir,'20180627_O3TPR_CD01_10258','115_sj_ep2d_diff_nav_steve'),...
@@ -161,16 +162,18 @@ for i = 1:length(files)
     zcomp(i) = dot([0;0;1],cross(iop(1:3),iop(4:6)));
 end
 
-maxLength = 0.6*zcomp.*maxLength;
-[mind,maxd] = bounds(maxLength);
-maxLength(3) = mean(maxLength(3:4));
-maxLength(5) = mean(maxLength(5:6));
-maxLength(7) = mean(maxLength(7:8));
-maxLength(9) = mean(maxLength(9:10));
-maxLength(11) = mean(maxLength(11:12));
-maxLength(13) = mean(maxLength(13:14));
-maxLength(15) = mean(maxLength(15:16));
-maxLength(17) = mean(maxLength(17:18));
-maxLength([4 6 8 10 12 14 16 18]) = [];
-meand = mean(maxLength);
-stdd = std(maxLength);
+%load('wspace.mat')
+
+maxzLength = 0.6*zcomp.*maxLength;
+[mind,maxd] = bounds(maxzLength);
+maxzLength(3) = mean(maxzLength(3:4));
+maxzLength(5) = mean(maxzLength(5:6));
+maxzLength(7) = mean(maxzLength(7:8));
+maxzLength(9) = mean(maxzLength(9:10));
+maxzLength(11) = mean(maxzLength(11:12));
+maxzLength(13) = mean(maxzLength(13:14));
+maxzLength(15) = mean(maxzLength(15:16));
+maxzLength(17) = mean(maxzLength(17:18));
+maxzLength([4 6 8 10 12 14 16 18]) = [];
+meand = mean(maxzLength);
+stdd = std(maxzLength);
