@@ -10,8 +10,6 @@ fname = ['data_' char(datetime("today",'Format','yyyyMMdd')) '.xlsx']; %file nam
 
 tbl_segment = table;
 tbl_slice = table;
-tbl_snr = table;
-tbl_snr_detail = table;
 
 %% main loop - extract results from each spreasheet
 for i = 1:len
@@ -50,16 +48,7 @@ for i = 1:len
         h = height(tbl_result);
         ID = repmat(ID,h,1);
         tech = repmat(tech,h,1);
-        if strcmp(sheets(j),'Summary')
-            tbl_info = table(ID,tech,'VariableNames',{'ID','tech'});
-            tbl_slice = [tbl_slice;tbl_info tbl_result];
-        elseif strcmp(sheets(j),'SNR')
-            tbl_info = table(ID,tech,'VariableNames',{'ID','tech'});
-            tbl_snr = [tbl_snr;tbl_info tbl_result];
-        elseif strcmp(sheets(j),'SNR_detail')
-            tbl_info = table(ID,tech,'VariableNames',{'ID','tech'});
-            tbl_snr_detail = [tbl_snr_detail;tbl_info tbl_result];
-        else
+        if ~strcmp(sheets(j),'Summary')
             tok2 = split(sheets(j),'_'); %tokenise name of sheet to get b-values and slice
             lowB = repmat(tok2(1),h,1);
             highB = repmat(tok2(2),h,1);
@@ -73,6 +62,9 @@ for i = 1:len
             tbl_info = table(ID,tech,slice,lowB,highB,segment','VariableNames',{'ID','tech','Slice','lowB','highB','segment'});
             tbl_segment = [tbl_segment;tbl_info tbl_result];
             tbl_segment(end,:) = []; %remove average row
+        else
+            tbl_info = table(ID,tech,'VariableNames',{'ID','tech'});
+            tbl_slice = [tbl_slice;tbl_info tbl_result];
         end
     end
 end
@@ -94,8 +86,6 @@ tbl_slice.lowB = lowB2;
 tech_valid = ["BH","CS","Gate","Nav","FB"];
 tbl_segment.tech = categorical(tbl_segment.tech,tech_valid);
 tbl_slice.tech = categorical(tbl_slice.tech,tech_valid);
-tbl_snr.tech = categorical(tbl_snr.tech,tech_valid);
-tbl_snr_detail.tech = categorical(tbl_snr_detail.tech,tech_valid);
 
 %% remove extra entry in segment sheet (average of myocardium)
 % exclude = find(ismember(tbl_seg.segment,7))';
@@ -125,10 +115,4 @@ tbl_slice([exclude exclude2],:) = [];
 
 warning('off','MATLAB:xlswrite:AddSheet');
 writetable(tbl_slice,fullfile(main,fname),'Sheet','slice');
-warning('on','MATLAB:xlswrite:AddSheet');
-
-%% write SNR sheets
-warning('off','MATLAB:xlswrite:AddSheet');
-writetable(tbl_snr,fullfile(main,fname),'Sheet','snr');
-writetable(tbl_snr_detail,fullfile(main,fname),'Sheet','snr_detail');
 warning('on','MATLAB:xlswrite:AddSheet');
